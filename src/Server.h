@@ -12,6 +12,8 @@ private:
     int port;
     Cache cache;
     ThreadPool threadPool;
+    // Declaration order is the initialisation order, whatever the constructor's
+    // list says, so these two are ordered to agree with it.
     SOCKET serverSocket;
     bool isRunning;
 
