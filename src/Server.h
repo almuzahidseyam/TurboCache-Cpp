@@ -3,9 +3,20 @@
 #include "ThreadPool.h"
 #include <string>
 
-// Need Winsock2 for Windows networking
-#include <winsock2.h>
-#include <ws2tcpip.h>
+// Cross-Platform Socket Definitions
+#ifdef _WIN32
+    #include <winsock2.h>
+    #include <ws2tcpip.h>
+#else
+    #include <sys/socket.h>
+    #include <arpa/inet.h>
+    #include <unistd.h>
+    
+    typedef int SOCKET;
+    const int INVALID_SOCKET = -1;
+    const int SOCKET_ERROR = -1;
+    #define closesocket(s) close(s)
+#endif
 
 class Server {
 private:

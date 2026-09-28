@@ -2,18 +2,23 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <cstring>
 
 Server::Server(int p, size_t numThreads) 
     : port(p), threadPool(numThreads), serverSocket(INVALID_SOCKET), isRunning(false) {
+#ifdef _WIN32
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         throw std::runtime_error("WSAStartup failed.");
     }
+#endif
 }
 
 Server::~Server() {
     stop();
+#ifdef _WIN32
     WSACleanup();
+#endif
 }
 
 void Server::start() {
@@ -89,6 +94,9 @@ void Server::handleClient(SOCKET clientSocket) {
             if (line.empty()) continue;
 
             std::string response = processCommand(line);
+            
+            // MSG_NOSIGNAL is often needed on Linux to prevent SIGPIPE on disconnected sockets
+            // but send() can just use standard flags if we handle disconnects cleanly.
             if (send(clientSocket, response.c_str(), static_cast<int>(response.length()), 0) == SOCKET_ERROR) {
                 closesocket(clientSocket);
                 return;
