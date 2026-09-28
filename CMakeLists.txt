@@ -4,6 +4,17 @@ project(TurboCache CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Enable memory and thread sanitizers for advanced debugging
+option(USE_SANITIZER "Enable ThreadSanitizer or AddressSanitizer (TSAN/ASAN)" OFF)
+
+if(USE_SANITIZER AND NOT WIN32)
+    if(USE_SANITIZER STREQUAL "TSAN")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -g -O1")
+    elseif(USE_SANITIZER STREQUAL "ASAN")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -O1")
+    endif()
+endif()
+
 # If threading is used
 find_package(Threads REQUIRED)
 
