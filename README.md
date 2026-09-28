@@ -32,3 +32,28 @@ DBSIZE
 DEL name
 :1
 ```
+
+## 🚀 Performance Benchmarking
+
+You can stress-test TurboCache-Cpp using the provided Python benchmark script. It uses multi-threading to fire thousands of concurrent GET and SET requests to measure throughput (Requests Per Second) and latency.
+
+`ash
+# Navigate to the benchmarks directory
+cd benchmarks
+
+# Run the benchmark tool (e.g., 20 threads, 5000 requests each -> 200,000 total requests)
+python benchmark.py --host 127.0.0.1 --port 6379 --threads 20 --requests 5000
+`
+
+### 📊 Example Output
+`	ext
+=====================================
+         BENCHMARK RESULTS           
+=====================================
+Total Threads       : 20
+Requests per Thread : 10000 (50% SET, 50% GET)
+Total Requests      : 200000
+Time Taken          : 1.4520 seconds
+Throughput          : 137741.05 req/sec
+=====================================
+`
