@@ -12,7 +12,7 @@ private:
     // Doubly linked list to store keys (most recently used at the front)
     mutable std::list<std::pair<std::string, std::string>> lru_list;
     // Map to store key -> iterator in the list
-    std::unordered_map<std::string, std::list<std::pair<std::string, std::string>>::iterator> store;
+    mutable std::unordered_map<std::string, std::list<std::pair<std::string, std::string>>::iterator> store;
     
     mutable std::shared_mutex rw_mutex;
 
